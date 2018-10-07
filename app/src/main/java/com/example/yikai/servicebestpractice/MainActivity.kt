@@ -50,11 +50,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener  {
 
     }
 
-    override fun onClick(v: View?) {
+    override fun onClick(v: View) {
         if (downloadBinder == null) {
             return;
         }
-        when (v?.id) {
+        when (v.id) {
             R.id.start_download -> {
                 val url = "ttps://raw.githubusercontent.com/guolindev/eclipse/master/eclipse-inst-win64.exe"
                 downloadBinder?.startDownload(url)
@@ -78,8 +78,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener  {
 
         val intent = Intent(this, DownloadService::class.java)
         startService(intent)
-        val bindService = bindService(intent, connection, Context.BIND_AUTO_CREATE)
-        if (checkSelfPermission(this, WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+        bindService(intent, connection, Context.BIND_AUTO_CREATE)
+        if (ContextCompat.checkSelfPermission(this, WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
         }
 

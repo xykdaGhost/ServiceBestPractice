@@ -16,7 +16,7 @@ class DownloadTask(listener: DownloadListener) : AsyncTask<String, Int, Int>() {
     val TYPE_CANCELED = 3
     val ZERO: Long = 0
 
-    val listener: DownloadListener ?= null
+    val listener: DownloadListener?= null
     var isCanceled = false
     var isPaused = false
     var lastProgress: Int = 0

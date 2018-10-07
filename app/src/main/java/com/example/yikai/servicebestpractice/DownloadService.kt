@@ -10,19 +10,17 @@ import android.os.Build
 import android.os.Environment
 import android.os.IBinder
 import android.support.v4.app.NotificationCompat
-import android.view.View
-import android.widget.AbsListView
 import android.widget.Toast
 import java.io.File
 
 class DownloadService : Service() {
 
-    public var downloadTask: DownloadTask? = null
-    var downloadUrl: String? = null
+    var downloadTask: DownloadTask? = null
+    var downloadUrl: String = ""
 
-    val listener= object : DownloadListener{
+    val listener= object : DownloadListener {
         override fun onProgress(progress: Int) {
-
+            getNotificationManager().notify(1, getNotification("下载中...", progress))
         }
 
         override fun onSuccess() {
@@ -97,7 +95,7 @@ class DownloadService : Service() {
         return getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     }
 
-    fun getNotification(title: String, progress: Int) : Notification {
+    fun getNotification(title: String, progress: Int): Notification {
         val intent = Intent(this, MainActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
@@ -112,12 +110,10 @@ class DownloadService : Service() {
                 .setLargeIcon(BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher))
                 .setContentTitle(title)
                 .setContentIntent(pendingIntent)
+                .setContentText(progress.toString() + "%")
+                .setProgress(100, progress, false)
                 .build()
-        if (progress >= 0) {
-            NotificationCompat.Builder(this, "channel")
-                    .setContentText(progress.toString() + "%")
-                    .setProgress(100, progress, false)
-        }
+
         return notification
     }
 
